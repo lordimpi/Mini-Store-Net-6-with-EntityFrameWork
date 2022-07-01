@@ -9,7 +9,7 @@
 <p>
     <a asp-action="Create" class="btn btn-success">Crear Libro</a>
 </p>
-<table class="table">
+<table class="table table-hover table-responsive table-striped" id="tbLibros">
     <thead>
         <tr>
             <th>
@@ -28,26 +28,55 @@
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Editorial)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Titulo)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Descripcion)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Precio)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-codigo="@item.Codigo" class="btn btn-warning btn-sm">Editar</a>
-                <a asp-action="Details" asp-route-codigo="@item.Codigo" class="btn btn-info btn-sm">Detalles</a>
-                <a asp-action="Delete" asp-route-codigo="@item.Codigo" class="btn btn-danger btn-sm">Borrar</a>
-            </td>
-        </tr>
-}
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Editorial)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Titulo)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Descripcion)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Precio)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-codigo="@item.Codigo" class="btn btn-warning btn-sm">Editar</a>
+                    <a asp-action="Details" asp-route-codigo="@item.Codigo" class="btn btn-info btn-sm">Detalles</a>
+                    <a asp-action="Delete" asp-route-codigo="@item.Codigo" class="btn btn-danger btn-sm">Borrar</a>
+                </td>
+            </tr>
+        }
     </tbody>
 </table>
+
+@section Scripts{
+    <!-- ============================================================
+    =ESTILOS PARA USO DE DATATABLES JS
+    ===============================================================-->
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.11.0/css/jquery.dataTables.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.2.9/css/responsive.dataTables.min.css">
+
+    <!-- ============================================================
+    =LIBRERIAS PARA USO DE DATATABLES JS
+    ===============================================================-->
+    <script src="https://cdn.datatables.net/1.11.0/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/responsive/2.2.9/js/dataTables.responsive.min.js"></script>
+
+
+    <script>
+
+        $(document).ready(function() {
+            $("#tbLibros").DataTable({
+                "language": {
+                    "url": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Spanish.json"
+                },
+            });
+        });
+
+    </script>
+
+}

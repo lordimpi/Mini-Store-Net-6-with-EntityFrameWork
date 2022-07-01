@@ -1,6 +1,8 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using MiniStoreWeb.Data;
+using MiniStoreWeb.Repositories;
+using MiniStoreWeb.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,6 +16,9 @@ builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.Requ
     .AddEntityFrameworkStores<ApplicationDbContext>();
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
+
+builder.Services.AddScoped<ILibroRepository, LibroRepository>();
+builder.Services.AddScoped<ILibroService, LibroService>();
 
 builder.Services.Configure<IdentityOptions>(options =>
 {

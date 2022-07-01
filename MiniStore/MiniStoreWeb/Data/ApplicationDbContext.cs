@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using MiniStoreWeb.Data.Entities;
 
 namespace MiniStoreWeb.Data
 {
@@ -9,5 +10,7 @@ namespace MiniStoreWeb.Data
             : base(options)
         {
         }
+
+        public DbSet<Libro> Libros { get; set; }
     }
 }

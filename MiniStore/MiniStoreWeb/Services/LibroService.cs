@@ -17,12 +17,12 @@ namespace MiniStoreWeb.Services
             return await _libroRepository.CreateLibro(libro);
         }
 
-        public async Task<bool> DeleteLibroService(int codigo)
+        public async Task<bool> DeleteLibroService(int? codigo)
         {
             return await _libroRepository.DeleteLibro(codigo);
         }
 
-        public async Task<Libro> GetLibroByIdService(int codigo)
+        public async Task<Libro> GetLibroByIdService(int? codigo)
         {
             return await _libroRepository.GetLibroById(codigo);
         }

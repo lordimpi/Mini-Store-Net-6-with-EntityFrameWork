@@ -7,7 +7,7 @@ namespace MiniStoreWeb.Repositories
         List<Libro> GetLibros();
         Task<bool> CreateLibro(Libro libro);
         Task<bool> UpdateLibro(Libro libro);
-        Task<bool> DeleteLibro(int codigo);
-        Task<Libro> GetLibroById(int codigo);
+        Task<bool> DeleteLibro(int? codigo);
+        Task<Libro> GetLibroById(int? codigo);
     }
 }

@@ -7,7 +7,7 @@ namespace MiniStoreWeb.Services
         List<Libro> GetLibrosService();
         Task<bool> CreateLibroService(Libro libro);
         Task<bool> UpdateLibroService(Libro libro);
-        Task<bool> DeleteLibroService(int codigo);
-        Task<Libro> GetLibroByIdService(int codigo);
+        Task<bool> DeleteLibroService(int? codigo);
+        Task<Libro> GetLibroByIdService(int? codigo);
     }
 }

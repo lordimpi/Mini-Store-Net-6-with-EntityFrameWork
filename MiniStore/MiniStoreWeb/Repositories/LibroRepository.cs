@@ -22,14 +22,14 @@ namespace MiniStoreWeb.Repositories
 
         }
 
-        public async Task<bool> DeleteLibro(int codigo)
+        public async Task<bool> DeleteLibro(int? codigo)
         {
             Libro libro = await _dbContext.Libros.FindAsync(codigo);
             _dbContext.Remove(libro);
             return await _dbContext.SaveChangesAsync() > 0;
         }
 
-        public async Task<Libro> GetLibroById(int codigo)
+        public async Task<Libro> GetLibroById(int? codigo)
         {
             Libro libro = await _dbContext.Libros.FirstOrDefaultAsync(l => l.Codigo == codigo);
             return libro;

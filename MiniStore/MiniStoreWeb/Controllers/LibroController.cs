@@ -19,6 +19,22 @@ namespace MiniStoreWeb.Controllers
             return View(libroList);
         }
 
+        public async Task<IActionResult> Details(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            Libro libro = await _libroService.GetLibroByIdService(id);
+            if (libro == null)
+            {
+                return NotFound();
+            }
+
+            return View(libro);
+        }
+
         public IActionResult Create()
         {
             return View();
@@ -43,14 +59,14 @@ namespace MiniStoreWeb.Controllers
             return View(libro);
         }
         
-        public async Task<IActionResult> Edit(int? codigo)
+        public async Task<IActionResult> Edit(int? id)
         {
-            if (codigo == null)
+            if (id == null)
             {
                 return NotFound();
             }
 
-            var libro = await _libroService.GetLibroByIdService(codigo);
+            var libro = await _libroService.GetLibroByIdService(id);
             if (libro == null)
             {
                 return NotFound();
@@ -61,9 +77,9 @@ namespace MiniStoreWeb.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int? codigo, Libro libro)
+        public async Task<IActionResult> Edit(int? id, Libro libro)
         {
-            if (codigo == null)
+            if (id == null)
             {
                 return NotFound();
             }
@@ -72,7 +88,7 @@ namespace MiniStoreWeb.Controllers
             {
                 try
                 {
-                    Libro mlibro = await _libroService.GetLibroByIdService(codigo);
+                    Libro mlibro = await _libroService.GetLibroByIdService(id);
                     mlibro.Editorial = libro.Editorial;
                     mlibro.Titulo = libro.Titulo;
                     mlibro.Descripcion = libro.Descripcion;

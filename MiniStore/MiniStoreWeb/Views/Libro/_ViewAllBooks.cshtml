@@ -1,0 +1,63 @@
+﻿@model IEnumerable<MiniStoreWeb.Data.Entities.Libro>
+
+<table class="table table-striped table-responsive-md table-bordered smfont" id="CategoriesTable">
+    <colgroup>
+        <col span="1" />
+        <col span="1" />
+    </colgroup>
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Codigo)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Titulo)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Editorial)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Precio)
+            </th>
+
+            <th>
+                <a onclick="showInPopup('@Url.Action("AddOrEdit", "Libro", new { id = 0 }, Context.Request.Scheme)' , 'Nuevo Libro')"
+                   class="btn btn-sm btn-success text-white">
+                    <i class="fa fa-plus-circle"></i> Libro
+                </a>
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Codigo)
+                </td>
+                <td>
+                    <a asp-action="Details" asp-controller="Libro" asp-route-id="@item.Codigo">
+                        @Html.DisplayFor(modelItem => item.Titulo)
+                    </a>
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Editorial)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Precio)
+                </td>
+
+                <td>
+                    <a onclick="showInPopup('@Url.Action("AddOrEdit", "Libro", new { id=item.Codigo }, Context.Request.Scheme)' , 'Actualizar Libro')"
+                        class="btn btn-sm btn-warning">
+                        <i class="fa fa-pencil-alt"></i>
+                    </a>
+                    <button data-id="@item.Codigo" class="btn btn-sm btn-danger deleteItem" data-bs-toggle="modal"
+                        data-bs-target="#deleteDialog">
+                        <i class="fa fa-trash"></i>
+                    </button>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

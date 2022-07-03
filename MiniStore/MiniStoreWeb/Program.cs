@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using MiniStoreWeb.Data;
 using MiniStoreWeb.Repositories;
 using MiniStoreWeb.Services;
+using Vereyon.Web;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,6 +18,7 @@ builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.Requ
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
 
+builder.Services.AddFlashMessage();
 builder.Services.AddScoped<ILibroRepository, LibroRepository>();
 builder.Services.AddScoped<ILibroService, LibroService>();
 

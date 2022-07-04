@@ -28,7 +28,12 @@ namespace MiniStoreWeb.Data.Entities
         [DisplayFormat(DataFormatString = "{0:C2}")]
         [Required(ErrorMessage = "El campo {0} es obligatorio.")]
         public decimal Precio { get; set; }
-                
+
+        [DisplayFormat(DataFormatString = "{0:N2}")]
+        [Display(Name = "Inventario")]
+        [Required(ErrorMessage = "El campo {0} es obligatorio.")]
+        public float Stock { get; set; }
+
         public string Path { get; set; }
     }
 }

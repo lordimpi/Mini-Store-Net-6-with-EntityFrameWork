@@ -19,7 +19,9 @@
             <th>
                 @Html.DisplayNameFor(model => model.Precio)
             </th>
-
+            <th>
+                @Html.DisplayNameFor(model => model.Stock)
+            </th>
             <th>
                 <a onclick="showInPopup('@Url.Action("AddOrEdit", "Libro", new { id = 0 }, Context.Request.Scheme)' , 'Nuevo Libro')"
                    class="btn btn-sm btn-success text-white">
@@ -46,10 +48,12 @@
                 <td>
                     @Html.DisplayFor(modelItem => item.Precio)
                 </td>
-
+                <td>
+                    @Html.DisplayFor(modelItem => item.Stock)
+                </td>
                 <td>
                     <a onclick="showInPopup('@Url.Action("AddOrEdit", "Libro", new { id=item.Codigo }, Context.Request.Scheme)' , 'Actualizar Libro')"
-                        class="btn btn-sm btn-warning">
+                   class="btn btn-sm btn-warning">
                         <i class="fa fa-pencil-alt"></i>
                     </a>
                     <button data-id="@item.Codigo" class="btn btn-sm btn-danger deleteItem" data-bs-toggle="modal"

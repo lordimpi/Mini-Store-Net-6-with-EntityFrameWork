@@ -37,7 +37,8 @@ namespace MiniStoreWeb.Controllers
             ViewData["CurrentFilter"] = searchString;
 
 
-            IQueryable<Libro> query = _dbContext.Libros;
+            IQueryable<Libro> query = _dbContext.Libros
+                .Include(l => l.BookImages);
 
             if (!string.IsNullOrEmpty(searchString))
             {

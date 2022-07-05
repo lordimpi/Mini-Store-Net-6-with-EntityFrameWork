@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using MiniStoreWeb.Data;
 using MiniStoreWeb.Data.Entities;
 using MiniStoreWeb.Helpers;
+using MiniStoreWeb.Models;
 using MiniStoreWeb.Services;
 using Vereyon.Web;
 using static MiniStoreWeb.Helpers.ModalHelper;
@@ -12,11 +14,16 @@ namespace MiniStoreWeb.Controllers
     {
         private readonly ILibroService _libroService;
         private readonly IFlashMessage _flashMessage;
+        private readonly ApplicationDbContext _context;
+        private readonly IWebHostEnvironment _env;
 
-        public LibroController(ILibroService libroService, IFlashMessage flashMessage)
+        public LibroController(ILibroService libroService, IFlashMessage flashMessage,
+            ApplicationDbContext context, IWebHostEnvironment env)
         {
             _libroService = libroService;
             _flashMessage = flashMessage;
+            _context = context;
+            _env = env;
         }
 
         public IActionResult Index()
@@ -117,6 +124,106 @@ namespace MiniStoreWeb.Controllers
                 return Json(new { isValid = true, html = ModalHelper.RenderRazorViewToString(this, "_ViewAllBooks", _libroService.GetLibrosService()) });
             }
             return Json(new { isValid = false, html = ModalHelper.RenderRazorViewToString(this, "AddOrEdit", libro) });
+        }
+
+        [NoDirectAccess]
+        public async Task<IActionResult> AddImage(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            Libro libro = await _libroService.GetLibroByIdService(id);
+
+            if (libro == null)
+            {
+                return NotFound();
+            }
+
+            AddBookImageViewModel model = new()
+            {
+                BookId = libro.Codigo
+            };
+
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AddImage(AddBookImageViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                Guid imageId = Guid.NewGuid();
+                Libro libro = await _libroService.GetLibroByIdService(model.BookId);
+                BookImage bookImage = new()
+                {
+                    Libro = libro,
+                    ImageId = imageId.ToString()+model.ImageFile.FileName
+                };
+
+                try
+                {
+
+                    _context.Add(bookImage);
+                    await _context.SaveChangesAsync();
+                    _flashMessage.Confirmation("Imagen agregada.");
+
+                    var fileName = System.IO.Path.Combine(
+                            _env.ContentRootPath, $"wwwroot/images/books",
+                            $"{bookImage.ImageId}"
+                        );
+
+                    using (FileStream fs = new System.IO.FileStream(
+                        fileName, System.IO.FileMode.Create))
+                    {
+                        await model.ImageFile.CopyToAsync(fs);
+                    }
+
+                    return Json(new
+                    {
+                        isValid = true,
+                        html = ModalHelper.RenderRazorViewToString(this, "Details", _context.Libros
+                                        .Include(l => l.BookImages)
+                                        .FirstOrDefaultAsync(l => l.Codigo == model.BookId))
+                    });
+                }
+                catch (Exception ex)
+                {
+                    _flashMessage.Danger(ex.Message);
+                }
+            }
+            return Json(new { isValid = false, html = ModalHelper.RenderRazorViewToString(this, "AddImage", model) });
+        }
+
+        public async Task<IActionResult> DeleteImage(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            BookImage bookImage = await _context.BookImages
+                .Include(bi => bi.Libro)
+                .FirstOrDefaultAsync(bi => bi.Id == id);
+
+            if (bookImage == null)
+            {
+                return NotFound();
+            }
+
+            _context.BookImages.Remove(bookImage);
+            await _context.SaveChangesAsync();
+
+            var fileName = System.IO.Path.Combine(
+                            _env.ContentRootPath, $"wwwroot\\images\\books\\", bookImage.ImageId.ToString()
+                        );
+
+            System.IO.File.Delete(fileName);
+
+            _flashMessage.Info("Imagen borrada.");
+            return RedirectToAction(nameof(Details), new { Id = bookImage.Libro.Codigo });
         }
     }
 }

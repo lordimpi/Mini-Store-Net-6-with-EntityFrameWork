@@ -1,0 +1,105 @@
+﻿@model MiniStoreWeb.Models.HomeViewModel
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<style type="text/css">
+    .card {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        border: 1px solid lightgray;
+        box-shadow: 2px 2px 8px 4px #d3d3d3d1;
+        border-radius: 15px;
+        font-family: sans-serif;
+        margin: 5px;
+    }
+</style>
+
+<h1>MiniStore</h1>
+
+<div class="mb-2">
+    <a asp-action="Index" asp-route-sortOrder="@ViewData["NameSortParm"]">Ordenar por Nombre</a>&nbsp;&nbsp;
+    <a asp-action="Index" asp-route-sortOrder="@ViewData["PriceSortParm"]">Ordenar por Precio</a>
+</div>
+
+<form asp-action="Index" method="get">
+    <div class="form-actions no-color">
+        <p>
+            Buscar por nombre: <input type="text" name="SearchString" value="@ViewData["CurrentFilter"]" />
+            <button type="submit" class="btn btn-warning">
+                <i class="fa-solid fa-search"></i> Buscar
+            </button>
+            <a asp-action="Index" class="btn btn-success">Ver Todos los Productos</a>
+        </p>
+    </div>
+</form>
+
+@if (Model.Quantity > 0)
+{
+    <a asp-action="ShowCart" class="btn btn-success">
+        Carrito de compras
+        <i class="fa-solid fa-cart-shopping"></i> (@Model.Quantity)
+    </a>
+}
+
+<div class="row row-cols-1 row-cols-md-4 g-4 mt-1">
+    @if (Model.Libros.Count() > 0)
+    {
+        @foreach (var item in Model.Libros)
+        {
+            <div class="col">
+                <div class="card h-100">
+                    <div class="text-center zoom">
+                        <img src="@item.ImageFullPath" style="height:150px; max-width:200px;"
+                     class="text-center" alt=@item.Titulo />
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title text-navy"> @item.Titulo</h5>
+                        <p class="card-text smfnt">@item.Descripcion</p>
+                        <h5 class="text-muted">@Html.DisplayFor(modelItem => item.Precio)</h5>
+                    </div>
+                    <div class="card-footer text-center">
+                        <a asp-action="Details" asp-route-id="@item.Codigo"
+                   class="btn btn-sm btn-secondary">Detalles</a>
+                        <a asp-action="Add" asp-route-id="@item.Codigo"
+                   class="btn btn-sm btn-success">Agregar al carrito</a>
+                    </div>
+                </div>
+            </div>
+        }
+    }
+    else
+    {
+        <h3>No hay productos con su criterio de búsqueda</h3>
+    }
+</div>
+
+@{
+    var prevDisabled = !Model.Libros.HasPreviousPage ? "disabled" : "";
+    var nextDisabled = !Model.Libros.HasNextPage ? "disabled" : "";
+}
+
+<div class="mt-5">
+    <a asp-action="Index"
+       asp-route-sortOrder="@ViewData["CurrentSort"]"
+       asp-route-pageNumber="@(Model.Libros.PageIndex - 1)"
+       asp-route-currentFilter="@ViewData["CurrentFilter"]"
+       class="btn btn-secondary @prevDisabled">
+        <i class="fa-solid fa-arrow-left"></i>
+    </a>
+    <a asp-action="Index"
+       asp-route-sortOrder="@ViewData["CurrentSort"]"
+       asp-route-pageNumber="@(Model.Libros.PageIndex + 1)"
+       asp-route-currentFilter="@ViewData["CurrentFilter"]"
+       class="btn btn-secondary @nextDisabled">
+        <i class="fa-solid fa-arrow-right"></i>
+    </a>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    }

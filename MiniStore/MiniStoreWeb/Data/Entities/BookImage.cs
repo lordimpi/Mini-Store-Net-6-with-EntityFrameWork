@@ -14,8 +14,8 @@ namespace MiniStoreWeb.Data.Entities
         //TODO: Pending to change to the correct path
         [Display(Name = "Foto")]
         public string ImageFullPath => ImageId == string.Empty
-            ? $"https://localhost:44384/images/noimage.png"
+            ? $"https://localhost:44309/images/noimage.png"
             //? $"https://impistoreshop.azurewebsites.net/images/noimage.png"
-            : $"https://localhost:44384/images/books/{ImageId}";
+            : $"https://localhost:44309/images/books/{ImageId}";
     }
 }

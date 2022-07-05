@@ -42,7 +42,7 @@ namespace MiniStoreWeb.Data.Entities
         //TODO: Pending to change to the correct path
         [Display(Name = "Foto")]
         public string ImageFullPath => BookImages == null || BookImages.Count == 0
-            ? $"https://localhost:44384/images/noimage.png"
+            ? $"https://localhost:44309/images/noimage.png"
             : BookImages.FirstOrDefault().ImageFullPath;
     }
 }

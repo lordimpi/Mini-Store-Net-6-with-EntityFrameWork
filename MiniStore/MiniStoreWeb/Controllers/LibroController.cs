@@ -172,7 +172,7 @@ namespace MiniStoreWeb.Controllers
                     _flashMessage.Confirmation("Imagen agregada.");
 
                     string fileName = System.IO.Path.Combine(
-                            _env.ContentRootPath, $"wwwroot/images/books",
+                            _env.ContentRootPath, $"wwwroot\\images\\books",
                             $"{bookImage.ImageId}"
                         );
 

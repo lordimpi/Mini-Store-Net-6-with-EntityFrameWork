@@ -134,5 +134,67 @@ namespace MiniStoreWeb.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        public async Task<IActionResult> Details(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            Libro libro = await _dbContext.Libros
+                .Include(p => p.BookImages)
+                .FirstOrDefaultAsync(p => p.Codigo == id);
+            if (libro == null)
+            {
+                return NotFound();
+            }
+
+            AddBookToCartViewModel model = new()
+            {
+                Description = libro.Descripcion,
+                Id = libro.Codigo,
+                Name = libro.Titulo,
+                Price = libro.Precio,
+                BookImages = libro.BookImages,
+                Quantity = 1,
+                Stock = libro.Stock,
+            };
+
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Details(AddBookToCartViewModel model)
+        {
+            if (!User.Identity.IsAuthenticated)
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
+            Libro libro = await _dbContext.Libros.FindAsync(model.Id);
+            if (libro == null)
+            {
+                return NotFound();
+            }
+
+            User user = await _userHelper.GetUserAsync(User.Identity.Name);
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            TemporalSale temporalSale = new()
+            {
+                Libro = libro,
+                Quantity = model.Quantity,
+                Remarks = model.Remarks,
+                User = user
+            };
+
+            _dbContext.TemporalSales.Add(temporalSale);
+            await _dbContext.SaveChangesAsync();
+            return RedirectToAction("Index");
+        }
     }
 }

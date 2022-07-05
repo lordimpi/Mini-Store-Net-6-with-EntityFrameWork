@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using MiniStoreWeb.common;
 using MiniStoreWeb.Data;
@@ -195,6 +196,172 @@ namespace MiniStoreWeb.Controllers
             _dbContext.TemporalSales.Add(temporalSale);
             await _dbContext.SaveChangesAsync();
             return RedirectToAction("Index");
+        }
+
+        [Authorize]
+        public async Task<IActionResult> ShowCart()
+        {
+            User user = await _userHelper.GetUserAsync(User.Identity.Name);
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            List<TemporalSale> temporalSales = await _dbContext.TemporalSales
+                .Include(ts => ts.Libro)
+                .ThenInclude(p => p.BookImages)
+                .Where(ts => ts.User.Id == user.Id)
+                .ToListAsync();
+
+            ShowCartViewModel model = new()
+            {
+                User = user,
+                TemporalSales = temporalSales
+            };
+
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ShowCart(ShowCartViewModel model)
+        {
+            User user = await _userHelper.GetUserAsync(User.Identity.Name);
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            model.User = user;
+            model.TemporalSales = await _dbContext.TemporalSales
+                .Include(ts => ts.Libro)
+                .ThenInclude(p => p.BookImages)
+                .Where(ts => ts.User.Id == user.Id)
+                .ToListAsync();
+
+            //Response response = await _ordersHelper.ProcessOrderAsync(model);
+            //if (response.IsSuccess)
+            //{
+            //    return RedirectToAction(nameof(OrderSuccess));
+            //}
+
+            //ModelState.AddModelError(string.Empty, response.Message);
+
+            return View(model);
+        }
+
+        public async Task<IActionResult> DecreaseQuantity(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            TemporalSale temporalSale = await _dbContext.TemporalSales.FindAsync(id);
+            if (temporalSale == null)
+            {
+                return NotFound();
+            }
+
+            if (temporalSale.Quantity > 1)
+            {
+                temporalSale.Quantity--;
+                _dbContext.TemporalSales.Update(temporalSale);
+                await _dbContext.SaveChangesAsync();
+            }
+            return RedirectToAction(nameof(ShowCart));
+        }
+
+        public async Task<IActionResult> IncreaseQuantity(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            TemporalSale temporalSales = await _dbContext.TemporalSales.FindAsync(id);
+            if (temporalSales == null)
+            {
+                return NotFound();
+            }
+
+            temporalSales.Quantity++;
+            _dbContext.TemporalSales.Update(temporalSales);
+            await _dbContext.SaveChangesAsync();
+
+            return RedirectToAction(nameof(ShowCart));
+        }
+
+        public async Task<IActionResult> Delete(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            TemporalSale temporalSale = await _dbContext.TemporalSales.FindAsync(id);
+            if (temporalSale == null)
+            {
+                return NotFound();
+            }
+
+            _dbContext.TemporalSales.Remove(temporalSale);
+            await _dbContext.SaveChangesAsync();
+            return RedirectToAction(nameof(ShowCart));
+        }
+
+        public async Task<IActionResult> Edit(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            TemporalSale temporalSale = await _dbContext.TemporalSales.FindAsync(id);
+            if (temporalSale == null)
+            {
+                return NotFound();
+            }
+
+            EditTemporalSaleViewModel model = new()
+            {
+                Id = temporalSale.Id,
+                Quantity = temporalSale.Quantity,
+                Remarks = temporalSale.Remarks,
+            };
+
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(int id, EditTemporalSaleViewModel model)
+        {
+            if (id != model.Id)
+            {
+                return NotFound();
+            }
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    TemporalSale temporalSale = await _dbContext.TemporalSales.FindAsync(id);
+                    temporalSale.Quantity = model.Quantity;
+                    temporalSale.Remarks = model.Remarks;
+                    _dbContext.Update(temporalSale);
+                    await _dbContext.SaveChangesAsync();
+                }
+                catch (Exception ex)
+                {
+                    ModelState.AddModelError(string.Empty, ex.Message);
+                    return View(model);
+                }
+
+                return RedirectToAction(nameof(ShowCart));
+            }
+
+            return View(model);
         }
     }
 }

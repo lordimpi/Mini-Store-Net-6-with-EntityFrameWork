@@ -1,4 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using MiniStoreWeb.common;
+using MiniStoreWeb.Data;
+using MiniStoreWeb.Data.Entities;
 using MiniStoreWeb.Helpers;
 using MiniStoreWeb.Models;
 
@@ -7,10 +10,12 @@ namespace MiniStoreWeb.Controllers
     public class AccountController : Controller
     {
         private readonly IUserHelper _userHelper;
+        private readonly ApplicationDbContext _context;
 
-        public AccountController(IUserHelper userHelper)
+        public AccountController(IUserHelper userHelper, ApplicationDbContext context)
         {
             _userHelper = userHelper;
+            _context = context;
         }
 
         public IActionResult Login()
@@ -44,6 +49,48 @@ namespace MiniStoreWeb.Controllers
         {
             await _userHelper.LogoutAsync();
             return RedirectToAction("Index", "Home");
+        }
+
+        public IActionResult Register()
+        {
+            AddUserViewModel model = new()
+            {
+                Id = Guid.Empty.ToString(),
+                UserType = UserType.User,
+            };
+
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Register(AddUserViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                User user = await _userHelper.AddUserAsync(model);
+                if (user == null)
+                {
+                    ModelState.AddModelError(string.Empty, "Este correo ya está siendo usado.");
+                    return View(model);
+                }
+
+                LoginViewModel loginViewModel = new LoginViewModel
+                {
+                    Password = model.Password,
+                    RememberMe = false,
+                    UserName = model.UserName
+                };
+
+                var result2 = await _userHelper.LoginAsync(loginViewModel);
+
+                if (result2.Succeeded)
+                {
+                    return RedirectToAction("Index", "Home");
+                }
+            }
+
+            return View(model);
         }
 
     }

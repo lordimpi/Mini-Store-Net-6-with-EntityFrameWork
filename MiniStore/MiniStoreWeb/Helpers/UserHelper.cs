@@ -27,6 +27,31 @@ namespace MiniStoreWeb.Helpers
             return await _userManager.CreateAsync(user, password);
         }
 
+        public async Task<User> AddUserAsync(AddUserViewModel model)
+        {
+            User user = new()
+            {
+                Address = model.Address,
+                Document = model.Document,
+                Email = model.UserName,
+                FirstName = model.FirstName,
+                LastName = model.LastName,
+                PhoneNumber = model.PhoneNumber,
+                UserName = model.UserName,
+                UserType = model.UserType
+            };
+
+            IdentityResult result = await _userManager.CreateAsync(user, model.Password);
+            if (result != IdentityResult.Success)
+            {
+                return null;
+            }
+
+            User newUser = await GetUserAsync(model.UserName);
+            await AddUserToRoleAsync(newUser, user.UserType.ToString());
+            return newUser;
+        }
+
         public async Task AddUserToRoleAsync(User user, string roleName)
         {
             await _userManager.AddToRoleAsync(user, roleName);

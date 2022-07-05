@@ -1,6 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using MiniStoreWeb.Data;
 using MiniStoreWeb.Data.Entities;
 using MiniStoreWeb.Helpers;
 using MiniStoreWeb.Models;
@@ -10,6 +10,7 @@ using static MiniStoreWeb.Helpers.ModalHelper;
 
 namespace MiniStoreWeb.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class LibroController : Controller
     {
         private readonly ILibroService _libroService;
@@ -160,7 +161,7 @@ namespace MiniStoreWeb.Controllers
                 BookImage bookImage = new()
                 {
                     Libro = libro,
-                    ImageId = imageId.ToString()+model.ImageFile.FileName
+                    ImageId = imageId.ToString() + model.ImageFile.FileName
                 };
 
                 try
@@ -170,7 +171,7 @@ namespace MiniStoreWeb.Controllers
                     await _context.SaveChangesAsync();
                     _flashMessage.Confirmation("Imagen agregada.");
 
-                    var fileName = System.IO.Path.Combine(
+                    string fileName = System.IO.Path.Combine(
                             _env.ContentRootPath, $"wwwroot/images/books",
                             $"{bookImage.ImageId}"
                         );
@@ -216,7 +217,7 @@ namespace MiniStoreWeb.Controllers
             _context.BookImages.Remove(bookImage);
             await _context.SaveChangesAsync();
 
-            var fileName = System.IO.Path.Combine(
+            string fileName = System.IO.Path.Combine(
                             _env.ContentRootPath, $"wwwroot\\images\\books\\", bookImage.ImageId.ToString()
                         );
 

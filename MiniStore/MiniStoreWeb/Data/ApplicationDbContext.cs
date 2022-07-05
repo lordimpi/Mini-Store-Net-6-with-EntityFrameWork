@@ -12,5 +12,6 @@ namespace MiniStoreWeb.Data
         }
 
         public DbSet<Libro> Libros { get; set; }
+        public DbSet<BookImage> MyProperty { get; set; }
     }
 }

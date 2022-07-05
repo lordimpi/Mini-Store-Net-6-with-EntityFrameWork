@@ -34,6 +34,15 @@ namespace MiniStoreWeb.Data.Entities
         [Required(ErrorMessage = "El campo {0} es obligatorio.")]
         public float Stock { get; set; }
 
-        public string Path { get; set; }
+        public ICollection<BookImage> BookImages { get; set; }
+
+        [Display(Name = "Fotos")]
+        public int ImagesNumber => BookImages == null ? 0 : BookImages.Count;
+
+        //TODO: Pending to change to the correct path
+        [Display(Name = "Foto")]
+        public string ImageFullPath => BookImages == null || BookImages.Count == 0
+            ? $"https://localhost:44384/images/noimage.png"
+            : BookImages.FirstOrDefault().ImageFullPath;
     }
 }

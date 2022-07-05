@@ -31,13 +31,17 @@ namespace MiniStoreWeb.Repositories
 
         public async Task<Libro> GetLibroById(int? codigo)
         {
-            Libro libro = await _dbContext.Libros.FirstOrDefaultAsync(l => l.Codigo == codigo);
+            Libro libro = await _dbContext.Libros
+                .Include(l => l.BookImages)
+                .FirstOrDefaultAsync(l => l.Codigo == codigo);
             return libro;
         }
 
         public List<Libro> GetLibros()
         {
-            List<Libro> libros = _dbContext.Libros.ToList();
+            List<Libro> libros = _dbContext.Libros
+                .Include(l => l.BookImages)
+                .ToList();
             return libros;
         }
 

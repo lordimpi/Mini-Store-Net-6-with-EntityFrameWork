@@ -4,6 +4,10 @@
     <colgroup>
         <col span="1" />
         <col span="1" />
+        <col span="1" />
+        <col span="1" />
+        <col span="1" />
+        <col span="1" />
     </colgroup>
     <thead>
         <tr>
@@ -21,6 +25,9 @@
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Stock)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ImageFullPath)
             </th>
             <th>
                 <a onclick="showInPopup('@Url.Action("AddOrEdit", "Libro", new { id = 0 }, Context.Request.Scheme)' , 'Nuevo Libro')"
@@ -51,6 +58,10 @@
                 <td>
                     @Html.DisplayFor(modelItem => item.Stock)
                 </td>
+                <td>
+                    <div class="zoom">
+                        <img src="@item.ImageFullPath" style="width:100px;" />
+                    </div>
                 <td>
                     <a onclick="showInPopup('@Url.Action("AddOrEdit", "Libro", new { id=item.Codigo }, Context.Request.Scheme)' , 'Actualizar Libro')"
                    class="btn btn-sm btn-warning">

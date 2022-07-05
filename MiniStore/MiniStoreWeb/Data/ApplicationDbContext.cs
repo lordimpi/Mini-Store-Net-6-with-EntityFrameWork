@@ -13,6 +13,8 @@ namespace MiniStoreWeb.Data
 
         public DbSet<Libro> Libros { get; set; }
         public DbSet<BookImage> BookImages { get; set; }
+        public DbSet<TemporalSale> TemporalSales { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);

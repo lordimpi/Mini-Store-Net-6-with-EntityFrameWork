@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using MiniStoreWeb.common;
 using MiniStoreWeb.Data;
 using MiniStoreWeb.Data.Entities;
+using MiniStoreWeb.Helpers;
 using MiniStoreWeb.Models;
 using System.Diagnostics;
 
@@ -11,18 +12,21 @@ namespace MiniStoreWeb.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-        private readonly Data.ApplicationDbContext _dbContext;
+        private readonly ApplicationDbContext _dbContext;
+        private readonly IUserHelper _userHelper;
 
-        public HomeController(ILogger<HomeController> logger, Data.ApplicationDbContext dbContext)
+        public HomeController(ILogger<HomeController> logger, ApplicationDbContext dbContext,
+            IUserHelper userHelper)
         {
             _logger = logger;
             _dbContext = dbContext;
+            _userHelper = userHelper;
         }
 
         public async Task<IActionResult> Index(string sortOrder, string currentFilter, string searchString, int? pageNumber)
         {
             ViewData["CurrentSort"] = sortOrder;
-            ViewData["NameSortParm"] = String.IsNullOrEmpty(sortOrder) ? "NameDesc" : "";
+            ViewData["NameSortParm"] = string.IsNullOrEmpty(sortOrder) ? "NameDesc" : "";
             ViewData["PriceSortParm"] = sortOrder == "Price" ? "PriceDesc" : "Price";
 
             if (searchString != null)
@@ -71,18 +75,17 @@ namespace MiniStoreWeb.Controllers
             {
                 Libros = await PaginatedList<Libro>.CreateAsync(query, pageNumber ?? 1, pageSize),
             };
-            //User user = await _userHelper.GetUserAsync(User.Identity.Name);
-            //if (user != null)
-            //{
-            //    model.Quantity = await _context.TemporalSales
-            //        .Where(ts => ts.User.Id == user.Id)
-            //        .SumAsync(ts => ts.Quantity);
-            //}
+            User user = await _userHelper.GetUserAsync(User.Identity.Name);
+            if (user != null)
+            {
+                model.Quantity = await _dbContext.TemporalSales
+                    .Where(ts => ts.User.Id == user.Id)
+                    .SumAsync(ts => ts.Quantity);
+            }
 
             return View(model);
 
         }
-
 
         public IActionResult Privacy()
         {
@@ -94,5 +97,42 @@ namespace MiniStoreWeb.Controllers
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
+
+        public async Task<IActionResult> Add(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            if (!User.Identity.IsAuthenticated)
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
+            Libro libro = await _dbContext.Libros.FindAsync(id);
+            if (libro == null)
+            {
+                return NotFound();
+            }
+
+            User user = await _userHelper.GetUserAsync(User.Identity.Name);
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            TemporalSale temporalSale = new()
+            {
+                Libro = libro,
+                Quantity = 1,
+                User = user
+            };
+
+            _dbContext.TemporalSales.Add(temporalSale);
+            await _dbContext.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
+        }
+
     }
 }

@@ -77,6 +77,7 @@ namespace MiniStoreWeb.Data
                     Descripcion = $"Alice Brown, una jovencita de 23 años. Un poco alocada, soñadora e impulsiva. Sueña con terminar sus estudios universitarios y darle a su padre una gran vida. Toma la decisión más difícil, que es mudarse a otra ciudad, dejando a su padre solo, en aquel lejano pueblo. ",
                     Precio = 55000,
                     Stock = 10,
+                    BookImages = new List<BookImage>() { new BookImage { ImageId = "elcoronel.jpg" } }
                 });
                 _context.Libros.Add(
                  new Libro
@@ -85,7 +86,8 @@ namespace MiniStoreWeb.Data
                      Editorial = $"linfier",
                      Descripcion = $"Un accidente fue el inicio de todo... ella sin desearlo se vio envuelta en una telaraña de mentiras, cuando quiso salir de ella... ya era demasiado tarde... el engaño ya estaba bien plantado y la verdad podía destruirla y a las personas que amaba. Nada de lo que parece puede ser real",
                      Precio = 75000,
-                     Stock = 5
+                     Stock = 5,
+                     BookImages = new List<BookImage>() { new BookImage { ImageId = "elengaño.jpg" } }
                  });
                 _context.Libros.Add(
                  new Libro
@@ -94,7 +96,8 @@ namespace MiniStoreWeb.Data
                      Editorial = $"Itzel",
                      Descripcion = $"La vida de Katherine se basa en la familia, estudios y amigos, excluye toda clase de romances debido a una experiencia fatídica con Sebastián. Todo esto cambia poco a poco cuando aparecen dos chicos que entre ellos son dos polos opuestos a hacerla dudar respecto al amor.",
                      Precio = 59000,
-                     Stock = 15
+                     Stock = 15,
+                     BookImages = new List<BookImage>() { new BookImage { ImageId = "enamoradaporcasualidad.png" } }
                  });
                 _context.Libros.Add(
                  new Libro
@@ -103,7 +106,8 @@ namespace MiniStoreWeb.Data
                      Editorial = $"Itzel",
                      Descripcion = $"Jenny solo es una chica que ha vivido toda su vida en la ciudad pero, todo esto cambia cuando su abuela aparece de la nada para llevarla consigo, al bosque. Ella acepta, sin saber las consecuencias que traería sus actos.",
                      Precio = 99000,
-                     Stock = 32
+                     Stock = 32,
+                     BookImages = new List<BookImage>() { new BookImage { ImageId = "unloboenelbosque.png" } }
                  });
                 _context.Libros.Add(
                  new Libro
@@ -112,7 +116,8 @@ namespace MiniStoreWeb.Data
                      Editorial = $"Itzel",
                      Descripcion = $"Jade Bomwer tiene 23 años su mejor amiga trabaja en una de las mejores empresas todo comienza cuando visita por primera vez a su mejor amiga a su trabajo , ella no se esperaba encontrar con un hombre guapo , alto, sexy y ojos verdes con una sonrisa muy pero muy sexi .",
                      Precio = 89000,
-                     Stock = 22
+                     Stock = 22,
+                     BookImages = new List<BookImage>() { new BookImage { ImageId = "jefeporcontrato.png" } }
                  });
                 _context.Libros.Add(
                  new Libro
@@ -121,7 +126,8 @@ namespace MiniStoreWeb.Data
                      Editorial = $"Itzel",
                      Descripcion = $"Joel Sólo quiero decir que NO la olvidé, pero tampoco quiero recordar esa etapa de mi niñez..",
                      Precio = 89000,
-                     Stock = 12
+                     Stock = 12,
+                     BookImages = new List<BookImage>() { new BookImage { ImageId = "miprimeramor.jpg" } }
                  });
                 _context.Libros.Add(
                  new Libro
@@ -130,7 +136,8 @@ namespace MiniStoreWeb.Data
                      Editorial = $"Itzel",
                      Descripcion = $"He descubierto que las personas no son más que una capa tras otra de secretos. Crees que las conoces, que las entiendes, pero sus motivos siempre permanecen ocultos, enterrados en sus corazones",
                      Precio = 49000,
-                     Stock = 12
+                     Stock = 12,
+                     BookImages = new List<BookImage>() { new BookImage { ImageId = "losSecretosdevenus.jpg" } }
                  });
                 _context.Libros.Add(
                  new Libro
@@ -139,7 +146,8 @@ namespace MiniStoreWeb.Data
                      Editorial = $"Hat",
                      Descripcion = $"Las alegres Navidades de Micaela Bravo se ven interrumpidas cuando, con solo doce años, alguien a quién creía de su familia le arranca la infancia acabando con lo que más quiere. Todos sus seres queridos son asesinados sin piedad y, ella, ultrajada y agredida hasta tal punto que sus agresores",
                      Precio = 79000,
-                     Stock = 22
+                     Stock = 22,
+                     BookImages = new List<BookImage>() { new BookImage { ImageId = "mataralareina.jpg" } }
                  });
                 _context.Libros.Add(
                  new Libro
@@ -148,7 +156,8 @@ namespace MiniStoreWeb.Data
                      Editorial = $"Hat",
                      Descripcion = $"Mil seiscientos años antes que Cleopatra, reinó en Egipto Hatshepsut, una mujer extraordinaria por su inteligencia y su belleza, y también por ser la primera de la historia que gobernó en un mundo dominado por los hombres. Según la tradición secular, los faraones de Egipto solo podían reinar si se casaban con una mujer de sangre real que, mediante el matrimonio, otorgaba al hombre la condición de",
                      Precio = 109000,
-                     Stock = 43
+                     Stock = 43,
+                     BookImages = new List<BookImage>() { new BookImage { ImageId = "ladamadelnilo.jpg" } }
                  });
                 _context.Libros.Add(
                  new Libro
@@ -157,7 +166,8 @@ namespace MiniStoreWeb.Data
                      Editorial = $"Hat",
                      Descripcion = $"Kenan tenía la vida perfecta: una esposa a la cual amaba y, un matrimonio Esperaba ansioso el nacimiento de los mellizos de ambos sexo, pero un accidente le hará ver que vivió en una mentira...",
                      Precio = 69000,
-                     Stock = 13
+                     Stock = 13,
+                     BookImages = new List<BookImage>() { new BookImage { ImageId = "dejameAmarte.jpg" } }
                  });
                 _context.Libros.Add(
                  new Libro
@@ -166,7 +176,8 @@ namespace MiniStoreWeb.Data
                      Editorial = $"Hat",
                      Descripcion = $"Sé que estas triste y a la vez me odias por dejarte, y no de una, sino de dos maneras, pero amor ¿Y si te vuelvo a encontrar? ¿,Me amarías como la primera vez? Liam Evans nunca creyó que la persona que más amaba, lo dañaría tanto, al punto de matarlo en vida...",
                      Precio = 69000,
-                     Stock = 11
+                     Stock = 11,
+                     BookImages = new List<BookImage>() { new BookImage { ImageId = "ySitevuelvoAencontrar.jpg" } }
                  });
                 _context.Libros.Add(
                  new Libro
@@ -175,7 +186,8 @@ namespace MiniStoreWeb.Data
                      Editorial = $"Hat",
                      Descripcion = $"Glenda es una mujer risueña que le haya siempre un lado bueno a todo, sin embargo después de terminar su relación con Cristian, ahora esta con su nuevo novio... ",
                      Precio = 49000,
-                     Stock = 11
+                     Stock = 11,
+                     BookImages = new List<BookImage>() { new BookImage { ImageId = "eresinolvidable.jpg" } }
                  });
                 _context.Libros.Add(
                  new Libro
@@ -184,7 +196,8 @@ namespace MiniStoreWeb.Data
                      Editorial = $"Az",
                      Descripcion = $"El caballero Guillaume de Saissac es testigo del asesinato de su padre en París. Así descubre que es miembro importante de una orden antigua y secreta que tiene dos misiones: Proteger al Grial...",
                      Precio = 49000,
-                     Stock = 11
+                     Stock = 11,
+                     BookImages = new List<BookImage>() { new BookImage { ImageId = "ladamaYelgrial.jpg" } }
                  });
                 _context.Libros.Add(
                  new Libro
@@ -193,7 +206,8 @@ namespace MiniStoreWeb.Data
                      Editorial = $"Az",
                      Descripcion = $"Libro 2: trilogía Deseo. Rodrigo Ferraioli, el nuevo jefe, todo este tiempo había creído que Camille se había suicidado; sin embargo, eso no era así...",
                      Precio = 88000,
-                     Stock = 21
+                     Stock = 21,
+                     BookImages = new List<BookImage>() { new BookImage { ImageId = "ambicionoscura.jpg" } }
                  });
                 _context.Libros.Add(
                  new Libro
@@ -202,7 +216,8 @@ namespace MiniStoreWeb.Data
                      Editorial = $"Az",
                      Descripcion = $"Amely nunca ha tenido miedo del lobo que ronda en su aldea. Pero ¿Qué sucedería si ahora ella supiera la verdad que se esconde tras esos ojos amarillos?...",
                      Precio = 56000,
-                     Stock = 11
+                     Stock = 11,
+                     BookImages = new List<BookImage>() { new BookImage { ImageId = "sangredeluna.jpg" } }
                  });
                 _context.Libros.Add(
                  new Libro
@@ -211,7 +226,8 @@ namespace MiniStoreWeb.Data
                      Editorial = $"Az",
                      Descripcion = $"Julie perdió al amor de su vida hace tres años, sin embargo, la realidad sale a la luz, la verdadera razón de la muerte de Raúl. ...",
                      Precio = 66000,
-                     Stock = 12
+                     Stock = 12,
+                     BookImages = new List<BookImage>() { new BookImage { ImageId = "Efimero.png" } }
                  });
                 await _context.SaveChangesAsync();
             }
